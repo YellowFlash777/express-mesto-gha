@@ -1,6 +1,7 @@
 {
   "extends": "airbnb-base",
   "rules": {
+    // Ошибка Линтера: Expected linebreaks to be 'CRLF' but found 'LF'. Пришлось это дописать, т.к. автотесты я бы по другому не прошёл
     "linebreak-style": 0,
     "no-underscore-dangle": ["error", { "allow": ["_id"] }]
   }
