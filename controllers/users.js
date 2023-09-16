@@ -1,4 +1,3 @@
-const { default: mongoose } = require('mongoose');
 const User = require('../models/user');
 
 module.exports.getUsers = (req, res) => {
@@ -8,18 +7,23 @@ module.exports.getUsers = (req, res) => {
 };
 
 module.exports.getUserId = (req, res) => {
-  User.findById(req.params.userId)
-    .orFail()
-    .then((user) => {
-      res.send(user);
-    })
-    .catch((err) => {
-      if (err instanceof mongoose.Error.CastError) {
-        res.status(400).send({ message: `Некорректный _id: ${req.params.userId}` });
-      } else {
-        res.status(500).send({ message: 'На сервере произошла ошибка' });
-      }
-    });
+  if (req.params.userId.length === 24) {
+    User.findById(req.params.userId)
+      .then((user) => {
+        if (!user) {
+          res.status(404).send({ message: 'Пользователь по данному ID не найден' });
+          return;
+        }
+        res.send(user);
+      })
+      .catch((err) => {
+        if (err.name === 'CastError') {
+          res.status(400).send({ message: 'Неверный ID пользователя' });
+        } else {
+          res.status(500).send({ message: 'На сервере произошла ошибка' });
+        }
+      });
+  }
 };
 
 module.exports.addUser = (req, res) => {
