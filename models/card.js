@@ -4,13 +4,13 @@ const urlValidator = require('../utils/constants');
 const cardSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true,
-    minlength: 2,
-    maxlength: 30,
+    required: [true, 'Поле не может быть пустым'],
+    minlength: [2, 'Минимум 2 символа'],
+    maxlength: [30, 'Превышена максимальная длина поля - 30 символов'],
   },
   link: {
     type: String,
-    required: true,
+    required: [true, 'Поле не может быть пустым'],
     validate: {
       validator(url) {
         return urlValidator.test(url);
