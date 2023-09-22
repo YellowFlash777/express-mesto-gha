@@ -22,9 +22,9 @@ mongoose.connect(DB_URL, {
   useUnifiedTopology: true,
 });
 
-app.use(errors());
-
 app.use('/', require('./routes/index'));
+
+app.use(errors());
 
 app.use((err, req, res, next) => {
   const { statusCode = 500, message } = err;

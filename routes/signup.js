@@ -1,7 +1,6 @@
 const router = require('express').Router();
 const { celebrate, Joi } = require('celebrate');
 const urlValidator = require('../utils/constants');
-
 const { addUser } = require('../controllers/users');
 
 router.post('/', celebrate({
@@ -10,8 +9,8 @@ router.post('/', celebrate({
     about: Joi.string().min(2).max(30),
     avatar: Joi.string().pattern(urlValidator),
     email: Joi.string().required().email(),
-    password: Joi.string().min(3).required(),
-  }),
+    password: Joi.string().required().min(3),
+  }).unknown(true),
 }), addUser);
 
 module.exports = router;
