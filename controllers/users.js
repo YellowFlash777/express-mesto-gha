@@ -5,6 +5,17 @@ const BadRequestError = require('../errors/bad-request-err');
 const NotFoundError = require('../errors/not-found-err');
 const ConflictError = require('../errors/conflictError');
 
+module.exports.login = (req, res, next) => {
+  const { email, password } = req.body;
+  return User.findUserByCredentials(email, password)
+    .then((user) => {
+      const token = jwt.sign({ _id: user._id }, 'victoria-secret', { expiresIn: '7d' });
+      res
+        .send({ token });
+    })
+    .catch(next);
+};
+
 module.exports.getUsers = (req, res, next) => {
   User.find({})
     .then((users) => res.send(users))
@@ -80,16 +91,5 @@ module.exports.editUserAvatar = (req, res, next) => {
 module.exports.getMeUser = (req, res, next) => {
   User.findById(req.user._id)
     .then((user) => res.send(user))
-    .catch(next);
-};
-
-module.exports.login = (req, res, next) => {
-  const { email, password } = req.body;
-  return User.findUserByCredentials(email, password)
-    .then((user) => {
-      const token = jwt.sign({ _id: user._id }, 'victoria-secret', { expiresIn: '7d' });
-      res
-        .send({ token });
-    })
     .catch(next);
 };

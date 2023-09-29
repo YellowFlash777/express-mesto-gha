@@ -1,10 +1,19 @@
 const router = require('express').Router();
+const express = require('express');
 const usersRouter = require('./users');
 const cardsRouter = require('./cards');
 const signupRouter = require('./signup');
 const signinRouter = require('./signin');
 const auth = require('../middlewares/auth');
 const NotFoundError = require('../errors/not-found-err');
+
+const app = express();
+
+app.get('/crash-test', () => {
+  setTimeout(() => {
+    throw new Error('Сервер сейчас упадёт');
+  }, 0);
+});
 
 router.use('/signup', signupRouter);
 router.use('/signin', signinRouter);
